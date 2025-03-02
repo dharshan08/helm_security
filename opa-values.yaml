@@ -1,0 +1,75 @@
+# OPA Image Configuration
+image:
+  repository: openpolicyagent/opa
+  tag: "0.70.0-envoy-12"
+  pullPolicy: IfNotPresent
+
+# OPA Service Configuration
+service:
+  type: ClusterIP
+  port: 8181
+
+# OPA Server Port
+port: 8181
+
+# Enable Authorization (Authz)
+authz:
+  enabled: true
+
+# Extra command-line arguments to match Docker Compose configuration.
+# Note: The bundle resource path is updated to point to the mounted file.
+extraArgs:
+  - "run"
+  - "--server"
+  - "--log-format=json-pretty"
+  - "--set=decision_logs.console=true"
+    #  - "--set=services.authz.url=http://bundle-server"
+    # - "--set=bundles.authz.service=authz"
+    #- "--set=bundles.authz.resource=/bundles/bundle.tar.gz"
+  - "/bundles/bundle.tar.gz"
+
+# Resource Limits (adjust as needed)
+resources:
+  limits:
+    cpu: "500m"
+    memory: "256Mi"
+  requests:
+    cpu: "250m"
+    memory: "128Mi"
+
+# Disable components you don't use
+certManager:
+  enabled: false
+
+prometheus:
+  enabled: false
+
+serviceMonitor:
+  enabled: false
+
+admissionController:
+  enabled: false
+
+mgmt:
+  enabled: false
+
+# Deployment Settings
+replicaCount: 1
+
+# Node Scheduling (if needed)
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+# Mount the bundle.tar.gz file via a ConfigMap.
+# Create the ConfigMap in your cluster using:
+# kubectl create configmap bundle-config --from-file=bundle.tar.gz=./config/bundle-server/bundle.tar.gz
+extraVolumes:
+  - name: bundle-volume
+    configMap:
+      name: bundle-config
+extraVolumeMounts:
+  - name: bundle-volume
+    mountPath: /bundles/bundle.tar.gz
+    subPath: bundle.tar.gz
+
