@@ -1,0 +1,14 @@
+image:
+  registry: docker.io
+  repository: bitnami/postgresql
+  tag: "13"
+  pullPolicy: IfNotPresent
+
+# Authentication configuration
+auth:
+  enablePostgresUser: true
+  postgresPassword: "keycloak"
+  username: "keycloak"
+  password: "keycloak"
+  database: "keycloak"
+~                              
