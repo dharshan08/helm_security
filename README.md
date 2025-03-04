@@ -17,7 +17,7 @@
 
 # note to bound persistent volume claim
 
-`kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}`
+`kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'`
 
 # verify pvc bound and installation
 
