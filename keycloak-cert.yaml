@@ -1,0 +1,20 @@
+# keycloak-certificate.yaml
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: keycloak-cert
+  namespace: opa
+spec:
+  secretName: keycloak-tls
+  duration: 8760h # 1 year
+  renewBefore: 360h # 15 days before expiry
+  subject:
+    organizations:
+      - MyCompany
+  commonName: identity.virtual33.myguest.virtualbox.org
+  dnsNames:
+    - identity.virtual33.myguest.virtualbox.org
+  issuerRef:
+    name: selfsigned-issuer
+    kind: Issuer
+
