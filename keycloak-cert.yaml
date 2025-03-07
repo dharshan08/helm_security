@@ -16,5 +16,5 @@ spec:
     - identity.virtual33.myguest.virtualbox.org
   issuerRef:
     name: selfsigned-issuer
-    kind: Issuer
+    kind: ClusterIssuer
 
