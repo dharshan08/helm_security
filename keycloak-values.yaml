@@ -90,4 +90,65 @@ proxyAddressForwarding: true
 extraEnvVars:
   - name: KEYCLOAK_FRONTEND_URL
     value: "https://identity.virtual33.myguest.virtualbox.org/"
+  - name: CONSOLE_SETUP_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: keycloak-client-secrets
+        key: console-setup
+  - name: XML2JSON_CLIENT_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: keycloak-client-secrets
+        key: kafka-producer-pm-xml2json
+  - name: JSON2KAFKA_CLIENT_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: keycloak-client-secrets
+        key: pm-producer-json2kafka
+  - name: DFC_CLIENT_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: keycloak-client-secrets
+        key: dfc
+  - name: PMLOG_CLIENT_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: keycloak-client-secrets
+        key: nrt-pm-log
+
+keycloakConfigCli:
+  enabled: true
+  configuration:
+    nonrtric-realm.json: |
+      {
+        "realm": "nonrtric-realm",
+        "enabled": true,
+        "clients": [
+          {
+            "clientId": "console-setup",
+            "publicClient": false,
+            "secret": "${CONSOLE_SETUP_SECRET}"
+          },
+          {
+            "clientId": "kafka-producer-pm-xml2json",
+            "publicClient": false,
+            "secret": "${XML2JSON_CLIENT_SECRET}"
+          },
+          {
+            "clientId": "pm-producer-json2kafka",
+            "publicClient": false,
+            "secret": "${JSON2KAFKA_CLIENT_SECRET}"
+          },
+          {
+            "clientId": "dfc",
+            "publicClient": false,
+            "secret": "${DFC_CLIENT_SECRET}"
+          },
+          {
+            "clientId": "nrt-pm-log",
+            "publicClient": false,
+            "secret": "${PMLOG_CLIENT_SECRET}"
+          }
+        ]
+      }
 
