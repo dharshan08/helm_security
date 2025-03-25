@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: opa
-          image: openpolicyagent/opa:latest-envoy
+          image: openpolicyagent/opa:0.70.0-envoy-10
           ports:
             - containerPort: 8181
           args:

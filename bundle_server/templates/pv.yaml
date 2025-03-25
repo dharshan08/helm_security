@@ -8,6 +8,10 @@ spec:
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-path
+  claimRef:
+    name: bundle-pvc
+    namespace: opa
   hostPath:
     path: "/mnt/data/bundles"  # Directory where bundle.tar.gz is stored
 
