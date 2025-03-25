@@ -18,12 +18,7 @@
 
 # keycloak setup
 
-`kubectl apply -f keycloak-cert.yaml`
-
-`kubectl apply -f selfsigned-issuer.yaml`
-
 `kubectl create ns opa`
 
-`helm install keycloak oci://registry-1.docker.io/bitnamicharts/keycloak -f keycloak-values.yaml -n opa`
 
  
