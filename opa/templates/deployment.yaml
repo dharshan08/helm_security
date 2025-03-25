@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opa-kafka
+  labels:
+    app: opa-kafka
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opa-kafka
+  template:
+    metadata:
+      labels:
+        app: opa-kafka
+    spec:
+      containers:
+        - name: opa
+          image: openpolicyagent/opa:latest-envoy
+          ports:
+            - containerPort: 8181
+          args:
+            - "run"
+            - "--server"
+            - "--log-format=json-pretty"
+            - "--set=decision_logs.console=true"
+            - "--set=services.authz.url=http://bundle-server"
+            - "--set=bundles.authz.service=authz"
+            - "--set=bundles.authz.resource=bundle.tar.gz"
+
