@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+  namespace: keycloak
+  labels:
+    app: keycloak
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      containers:
+        - name: keycloak
+          image: quay.io/keycloak/keycloak:20.0.1
+          command:
+            - "start"
+            - "--https-key-store-file=/etc/x509/https/keycloak.server.keystore.p12"
+            - "--https-key-store-password=$(KC_KEYSTORE_PASSWORD)"
+            - "--https-key-store-type=PKCS12"
+            - "--https-trust-store-file=/etc/x509/https/keycloak.client.truststore.p12"
+            - "--https-trust-store-password=$(KC_KEYSTORE_PASSWORD)"
+            - "--https-trust-store-type=PKCS12"
+            - "--https-client-auth=request"
+            - "--http-enabled=true"
+          ports:
+            - containerPort: 8080
+            - containerPort: 8443
+          env:
+            - name: KEYCLOAK_ADMIN
+              value: "admin"
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-secret
+                  key: admin-password
+            - name: KC_HOSTNAME
+              value: "identity.virtual33.myguest.virtualbox.org"
+            - name: KC_HTTP_ENABLED
+              value: "true"
+            - name: KEYCLOAK_DATABASE_HOST
+              value: "identitydb-postgresql"
+            - name: KEYCLOAK_DATABASE_NAME
+              value: "keycloak"
+            - name: KEYCLOAK_DATABASE_USER
+              value: "keycloak"
+            - name: KEYCLOAK_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-secret
+                  key: db-password
+            - name: KC_HTTPS_CLIENT_AUTH
+              value: "request"
+            - name: KC_KEYSTORE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-secret
+                  key: keystore-password
+          volumeMounts:
+            - name: keycloak-certs
+              mountPath: /etc/x509/https
+              readOnly: true
+      volumes:
+        - name: keycloak-certs
+          secret:
+            secretName: keycloak-certs
