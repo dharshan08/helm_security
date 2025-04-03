@@ -1,0 +1,47 @@
+replicaCount: 1
+
+image:
+  repository: quay.io/keycloak/keycloak
+  tag: 20.0.1
+  pullPolicy: IfNotPresent
+
+keycloak:
+  adminPassword: "admin"  # Change this as needed
+  serviceName: "keycloak"  # Keycloak service name in Kubernetes
+  port: 8080  
+
+  extraArgs:
+    - "--import-realm"
+  extraEnv:
+    - name: KEYCLOAK_IMPORT
+      value: "/opt/keycloak/import/realm-export.json"
+    - name: KEYCLOAK_TLS_KEYSTORE_FILE
+      value: "/opt/keycloak/certs/keystore.p12"
+    - name: KEYCLOAK_TLS_KEYSTORE_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: keycloak-certificates
+          key: keystore-password
+    - name: KEYCLOAK_TLS_TRUSTSTORE_FILE
+      value: "/opt/keycloak/certs/truststore.p12"
+    - name: KEYCLOAK_TLS_TRUSTSTORE_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: keycloak-certificates
+          key: truststore-password
+
+  extraVolumes:
+    - name: realm-export
+      configMap:
+        name: realm-export-configmap
+    - name: keycloak-certificates
+      secret:
+        secretName: keycloak-certificates
+
+  extraVolumeMounts:
+    - name: realm-export
+      mountPath: /opt/keycloak/import
+      subPath: realm-export.json
+    - name: keycloak-certificates
+      mountPath: /opt/keycloak/certs
+

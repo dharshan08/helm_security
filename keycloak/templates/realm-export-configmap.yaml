@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: realm-export-configmap
+  namespace: opa
+data:
+  realm-export.json: |
+    {
+      "id": "nonrtric-realm",
+      "realm": "nonrtric-realm",
+      "enabled": true,
+      "clients": [
+        {
+          "clientId": "console-setup",
+          "enabled": true,
+          "directAccessGrantsEnabled": true,
+          "publicClient": false,
+          "secret": "KEYCLOAK",
+          "serviceAccountsEnabled": true,
+          "standardFlowEnabled": false,
+          "redirectUris": ["http://172.1.40.26:12254/*"]
+        },
+          "clientId": "kafka-producer-pm-xml2json",
+          "enabled": true,
+          "directAccessGrantsEnabled": true,
+          "publicClient": false,
+          "secret": "KEYCLOAK",
+          "serviceAccountsEnabled": true,
+          "standardFlowEnabled": false,
+          "redirectUris": ["http://172.1.40.26:12254/*"]
+        },
+        {
+          "clientId": "pm-producer-json2kafka",
+          "enabled": true,
+          "directAccessGrantsEnabled": true,
+          "publicClient": false,
+          "secret": "KEYCLOAK",
+          "serviceAccountsEnabled": true,
+          "standardFlowEnabled": false,
+          "redirectUris": ["http://172.1.40.26:12254/*"]
+        },
+        {
+          "clientId": "dfc",
+          "enabled": true,
+          "directAccessGrantsEnabled": true,
+          "publicClient": false,
+          "secret": "KEYCLOAK",
+          "serviceAccountsEnabled": true,
+          "standardFlowEnabled": false,
+          "redirectUris": ["http://172.1.40.26:12254/*"]
+        },
+        {
+          "clientId": "nrt-pm-log",
+          "enabled": true,
+          "directAccessGrantsEnabled": true,
+          "publicClient": false,
+          "secret": "KEYCLOAK",
+          "serviceAccountsEnabled": true,
+          "standardFlowEnabled": false,
+          "redirectUris": ["http://172.1.40.26:12254/*"]
+        }
+
+      ]
+    }
+

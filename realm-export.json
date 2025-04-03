@@ -1,0 +1,23 @@
+{
+  "realm": "myrealm",
+  "enabled": true,
+  "clients": [
+    {
+      "clientId": "my-client",
+      "enabled": true,
+      "publicClient": true
+    }
+  ],
+  "users": [
+    {
+      "username": "admin",
+      "enabled": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "admin-password"
+        }
+      ]
+    }
+  ]
+}

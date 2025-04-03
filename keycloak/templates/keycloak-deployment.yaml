@@ -40,7 +40,7 @@ spec:
             - name: KC_HTTP_ENABLED
               value: "true"
             - name: KEYCLOAK_DATABASE_HOST
-              value: "identitydb-postgresql"  # Service name from Helm
+              value: "identitydb-postgresql"
             - name: KEYCLOAK_DATABASE_NAME
               valueFrom:
                 secretKeyRef:
@@ -56,6 +56,13 @@ spec:
                 secretKeyRef:
                   name: keycloak-db-secret
                   key: POSTGRESQL_PASSWORD
+            - name: KEYCLOAK_CLIENT_SECRET
+              valueFrom:
+               secretKeyRef:
+                 name: keycloak-db-secret
+                 key: CONSOLE_SETUP_CLIENT_SECRET
+            - name: KEYCLOAK_IMPORT
+              value: "/opt/keycloak/data/import/realm-export.json"
           ports:
             - containerPort: 8080
               name: http
@@ -65,8 +72,14 @@ spec:
             - name: keycloak-certificates
               mountPath: /etc/x509/https
               readOnly: true
+            - name: realm-export-volume
+              mountPath: /opt/keycloak/data/import
+              readOnly: true
       volumes:
         - name: keycloak-certificates
           secret:
             secretName: keycloak-certificates
+        - name: realm-export-volume
+          configMap:
+            name: realm-export-configmap
 
