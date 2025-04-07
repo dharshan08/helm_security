@@ -56,11 +56,11 @@ spec:
                 secretKeyRef:
                   name: keycloak-db-secret
                   key: POSTGRESQL_PASSWORD
-            - name: KEYCLOAK_CLIENT_SECRET
+            - name: CLIENT_SECRET
               valueFrom:
-               secretKeyRef:
-                 name: keycloak-db-secret
-                 key: CONSOLE_SETUP_CLIENT_SECRET
+                secretKeyRef:
+                  name: keycloak-client-secret
+                  key: client-secret
             - name: KEYCLOAK_IMPORT
               value: "/opt/keycloak/data/import/realm-export.json"
           ports:

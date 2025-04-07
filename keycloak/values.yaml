@@ -10,6 +10,9 @@ keycloak:
   serviceName: "keycloak"  # Keycloak service name in Kubernetes
   port: 8080  
 
+  clientSecrets:
+    consoleSetup: "KEYCLOAK"
+
   extraArgs:
     - "--import-realm"
   extraEnv:
