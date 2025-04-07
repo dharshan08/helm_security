@@ -1,3 +1,5 @@
+# apply helm chart for bundle_server
+`helm upgrade --install bundle-server ./bundle_server -n opa`
 # apply helm chart for postgresql
 
 `helm install identitydb oci://registry-1.docker.io/bitnamicharts/postgresql -f postgresql-values.yaml -n opa`
