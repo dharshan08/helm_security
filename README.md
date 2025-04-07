@@ -26,6 +26,10 @@
 
 `helm upgrade --install bundle-server ./bundle_server -n opa`
 
+# apply helm chart for opa
+
+`helm upgrade --install opa-kafka ./opa -n opa`
+
 # apply helm chart for postgresql
 
 `helm install identitydb oci://registry-1.docker.io/bitnamicharts/postgresql -f postgresql-values.yaml -n opa`
