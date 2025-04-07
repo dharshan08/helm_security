@@ -1,0 +1,82 @@
+# Release name override (optional)
+fullnameOverride: keycloak
+
+# Replica count
+replicas: 1
+
+# Image configuration
+image:
+  repository: quay.io/keycloak/keycloak
+  tag: "20.0.1"
+  pullPolicy: IfNotPresent
+
+# Override the container's entrypoint command
+command:
+  - "start"
+  - "--https-key-store-file=/etc/x509/https/keycloak.server.keystore.p12"
+  - "--https-key-store-password=$${KC_KEYSTORE_PASSWORD}"
+  - "--https-key-store-type=PKCS12"
+  - "--https-trust-store-file=/etc/x509/https/keycloak.client.truststore.p12"
+  - "--https-trust-store-password=$${KC_KEYSTORE_PASSWORD}"
+  - "--https-trust-store-type=PKCS12"
+  - "--https-client-auth=request"
+  - "--http-enabled=true"
+
+# Environment variables matching docker-compose
+extraEnv: |
+  - name: KEYCLOAK_ADMIN
+    value: "admin"
+  - name: KEYCLOAK_ADMIN_PASSWORD
+    value: "admin"
+  - name: KC_KEYSTORE_PASSWORD
+    value: "changeit"
+  - name: KC_HOSTNAME
+    value: "keycloak"
+  - name: KC_HTTP_ENABLED
+    value: "true"
+  - name: KEYCLOAK_DATABASE_HOST
+    value: "identitydb-postgresql"
+  - name: KEYCLOAK_DATABASE_NAME
+    value: "keycloak"
+  - name: KEYCLOAK_DATABASE_USER
+    value: "keycloak"
+  - name: KEYCLOAK_DATABASE_PASSWORD
+    value: "keycloak"
+  - name: KC_HTTPS_CLIENT_AUTH
+    value: "request"
+
+# Disable the embedded PostgreSQL since an external DB is used
+postgresql:
+  enabled: false
+
+# Configure volumes to mount certificate files
+# Adjust the hostPath to the correct absolute path on your host or use a different volume type (e.g. ConfigMap or Secret)
+extraVolumes: |
+  - name: keycloak-certs
+    hostPath:
+      path: /certs
+      type: Directory
+
+# Mount the certificate files into the container at /etc/x509/https
+extraVolumeMounts: |
+  - name: keycloak-certs
+    mountPath: /etc/x509/https
+    readOnly: true
+
+# Service configuration with Traefik annotations and custom ports
+service:
+  type: NodePort
+  # Override ports to match your docker-compose mapping:
+  httpPort: 8462
+  httpsPort: 8463
+  annotations:
+    traefik.enable: "true"
+    traefik.http.routers.identity.entrypoints: websecure
+    traefik.http.routers.identity.rule: "Host(`identity.virtual33.myguest.virtualbox.org`)"
+    traefik.http.routers.identity.tls: "true"
+    traefik.http.services.identity.loadbalancer.server.port: "8080"
+
+# Optionally add these labels to the Keycloak Pod
+podLabels:
+  traefik.enable: "true"
+
