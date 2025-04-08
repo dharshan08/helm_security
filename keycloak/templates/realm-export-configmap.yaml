@@ -20,6 +20,7 @@ data:
           "standardFlowEnabled": false,
           "redirectUris": ["http://172.1.40.26:12254/*"]
         },
+        {
           "clientId": "kafka-producer-pm-xml2json",
           "enabled": true,
           "directAccessGrantsEnabled": true,
