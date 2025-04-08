@@ -34,6 +34,8 @@
 
 `helm install identitydb oci://registry-1.docker.io/bitnamicharts/postgresql -f postgresql-values.yaml -n opa`
 
+# apply helm chart for keycloak
 
+`helm upgrade --install keycloak ./keycloak -n opa`
 
  
