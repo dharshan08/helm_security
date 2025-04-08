@@ -38,4 +38,8 @@
 
 `helm upgrade --install keycloak ./keycloak -n opa`
 
+# check keycloak administration console
+
+https://identity.virtual33.myguest.virtualbox.org:/<NODE-PORT>//
+
  
