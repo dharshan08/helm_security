@@ -40,6 +40,6 @@
 
 # check keycloak administration console
 
-https://identity.virtual33.myguest.virtualbox.org:/<NODE-PORT>//
+https://identity.virtual33.myguest.virtualbox.org:NODE-PORT/
 
  
