@@ -1,0 +1,8 @@
+persistence:
+  enabled: true
+  mountPath: /usr/share/nginx/html
+  claimName: nfs-pvc
+
+nfs-server:
+  storageClass: nfs-storage
+

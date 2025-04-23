@@ -12,6 +12,11 @@ keycloak:
 
   clientSecrets:
     consoleSetup : "KEYCLOAK"
+    kafkaProducerPmXml2json: "KEYCLOAK"
+    pmProducerJson2kafka: "KEYCLOAK"
+    dfc: "KEYCLOAK"
+    nrtPmLog: "KEYCLOAK"
+
 
   persistence:
     enabled: true

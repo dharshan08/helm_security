@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nfs-service
+  namespace: default
+spec:
+  ports:
+    - port: 2049
+      targetPort: 2049
+  selector:
+    app: nfs-server
+

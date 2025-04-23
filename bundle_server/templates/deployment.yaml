@@ -2,8 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: bundle-server
-  labels:
-    app: bundle-server
 spec:
   replicas: 1
   selector:
@@ -16,15 +14,14 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: nginx:1.21
+          image: nginx:alpine
           ports:
             - containerPort: 80
           volumeMounts:
-            - name: bundle-volume
-              mountPath: /usr/share/nginx/html/
+            - name: shared
+              mountPath: /usr/share/nginx/html  # Directly set the mount path here
       volumes:
-        - name: bundle-volume
+        - name: shared
           persistentVolumeClaim:
-            claimName: bundle-pvc
-      restartPolicy: Always
+            claimName: nfs-pvc  # Keep this as it is (refers to your PVC)
 

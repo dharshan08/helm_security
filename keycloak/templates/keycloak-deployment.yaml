@@ -6,7 +6,7 @@ metadata:
   labels:
     app: keycloak
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: keycloak
@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: keycloak
-          image: quay.io/keycloak/keycloak:20.0.1
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: IfNotPresent
           args:
             - "start"
@@ -63,7 +63,7 @@ spec:
             - name: KEYCLOAK_IMPORT
               value: "/opt/keycloak/data/import/realm-export.json"
           ports:
-            - containerPort: 8080
+            - containerPort: {{ .Values.keycloak.port }}
               name: http
               protocol: TCP
             - containerPort: 8443

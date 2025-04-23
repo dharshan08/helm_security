@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nfs-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nfs-server
+  template:
+    metadata:
+      labels:
+        app: nfs-server
+    spec:
+      initContainers:
+        - name: extract-bundle
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              mkdir -p /exports && \
+              echo "$BUNDLE_DATA" | base64 -d > /exports/bundle.tar.gz && \
+              tar -xzf /exports/bundle.tar.gz -C /exports
+          env:
+            - name: BUNDLE_DATA
+              valueFrom:
+                configMapKeyRef:
+                  name: bundle-data
+                  key: bundle.tar.gz.base64
+          volumeMounts:
+            - name: export-volume
+              mountPath: /exports
+      containers:
+        - name: nfs-server
+          image: itsthenetwork/nfs-server-alpine:latest
+          ports:
+            - containerPort: 2049
+          securityContext:
+            privileged: true
+          env:
+            - name: SHARED_DIRECTORY
+              value: "/exports"
+          volumeMounts:
+            - name: export-volume
+              mountPath: /exports
+      volumes:
+        - name: export-volume
+          emptyDir: {}

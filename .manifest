@@ -1,0 +1,5 @@
+{
+  "revision": "v1",
+  "roots": ["ics", "kafka", "minio", "envoy"]
+}
+
